@@ -1,0 +1,36 @@
+  float input_voltage = 0.0f;
+  char usb_buffer[64];
+  uint32_t last_usb_tick = 0;
+
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+
+	  HAL_ADC_Start(&hadc1);
+
+	  if (HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY) == HAL_OK){
+		  adc_raw = HAL_ADC_GetValue(&hadc1);
+
+		  input_voltage = ((float)adc_raw * 3.3f) / 4095.0f;
+
+	  }
+	  HAL_ADC_Stop(&hadc1);
+
+	  if (HAL_GetTick() - last_usb_tick >= 100)
+	    {
+	      snprintf(usb_buffer, sizeof(usb_buffer), "Raw: %lu | Voltage: %.2fV\r\n", adc_raw, input_voltage);
+
+	      if (CDC_Transmit_FS((uint8_t*)usb_buffer, strlen(usb_buffer)) == USBD_OK)
+	      {
+	        last_usb_tick = HAL_GetTick(); 
+	      }
+	  }
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
