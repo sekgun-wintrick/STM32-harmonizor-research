@@ -1,0 +1,14 @@
+uint8_t command[50] = "";
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
+  	if (huart == &huart4){
+  		HAL_UART_Transmit_DMA(&huart4, command, Size);
+
+  		HAL_UARTEx_ReceiveToIdle_DMA(&huart4, command, sizeof(command));
+
+HAL_Delay(500);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart4, command, sizeof(command));
+  while (1)
+  {
+  //some data-processing code
+  }
