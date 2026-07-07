@@ -1,0 +1,54 @@
+  uint32_t last_usb_tick = 0;
+  uint32_t delay = 0;
+
+  uint8_t mes1[30] = "C key";
+  uint8_t mes2[30] = "C# key";
+  uint8_t mes3[30] = "D key";
+  uint8_t mes4[30] = "D# key";
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  
+  while (1)
+  {
+	  delay = HAL_GetTick() - last_usb_tick;
+	  if (HAL_GPIO_ReadPin(brown_wire_GPIO_Port, brown_wire_Pin) == GPIO_PIN_SET){
+	  	if(delay > 500){HAL_UART_Transmit_DMA(&huart4, mes1, sizeof(mes1));}
+
+	    HAL_GPIO_WritePin(D2_GPIO_Port, D2_Pin, GPIO_PIN_RESET);
+	  	HAL_GPIO_WritePin(GPIOA, D3_Pin, GPIO_PIN_SET);
+	  }
+
+	  if (HAL_GPIO_ReadPin(black_wire_GPIO_Port, black_wire_Pin) == GPIO_PIN_SET){
+		  if(delay > 500){HAL_UART_Transmit_DMA(&huart4, mes2, sizeof(mes2));}
+
+	    HAL_GPIO_WritePin(D3_GPIO_Port, D3_Pin, GPIO_PIN_RESET);
+	    HAL_GPIO_WritePin(GPIOA, D2_Pin, GPIO_PIN_SET);
+	  }
+
+	  if (HAL_GPIO_ReadPin(yellow_wire_GPIO_Port, yellow_wire_Pin) == GPIO_PIN_SET){
+		  if(delay > 500){HAL_UART_Transmit_DMA(&huart4, mes3, sizeof(mes3));}
+
+	    HAL_GPIO_WritePin(D2_GPIO_Port, D2_Pin, GPIO_PIN_RESET);
+	  	HAL_GPIO_WritePin(GPIOA, D3_Pin, GPIO_PIN_SET);
+	  }
+
+	  if (HAL_GPIO_ReadPin(orange_wire_GPIO_Port, orange_wire_Pin) == GPIO_PIN_SET){
+		  if(delay > 500){HAL_UART_Transmit_DMA(&huart4, mes4, sizeof(mes4));}
+
+	  	HAL_GPIO_WritePin(D3_GPIO_Port, D3_Pin, GPIO_PIN_RESET);
+     	HAL_GPIO_WritePin(GPIOA, D2_Pin, GPIO_PIN_SET);
+	  }
+
+	  if (delay>500){
+		  delay = 0;
+		  last_usb_tick = HAL_GetTick();
+	  }
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
+}
